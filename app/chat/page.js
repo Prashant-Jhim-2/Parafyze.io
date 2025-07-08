@@ -199,7 +199,7 @@ export default function ChatPage() {
                 </div>
               </div>
             ))}
-            <div ref= {AiThinking} className='hidden ml-12 items-center space-x-2'>
+            <div ref= {AiThinking} className='hidden w-full mt-6 justify-center items-center space-x-2'>
             <div   className = 'border-b-2 border-b-black rounded-full w-4 h-4 animate-spin'></div>
             <span className='text-black text-sm animate-pulse  '>🤖 AI is thinking... 
              
