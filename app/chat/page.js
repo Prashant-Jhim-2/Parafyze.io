@@ -113,21 +113,21 @@ export default function ChatPage() {
               animationDelay: `${element.delay}s`
             }}
           >
-            <div className="w-full h-full bg-gradient-to-br from-indigo-300/30 to-purple-400/20 rounded-full blur-sm"></div>
+            <div className="w-full h-full bg-gradient-to-br from-black/30 to-black/20 rounded-full blur-sm"></div>
           </div>
         ))}
         
         {/* Additional floating icons */}
-        <div className="absolute top-20 left-10 text-indigo-300/20 animate-bounce" style={{ animationDelay: '1s' }}>
+        <div className="absolute top-20 left-10 text-black/20 animate-bounce" style={{ animationDelay: '1s' }}>
           <Sparkles className="h-8 w-8" />
         </div>
-        <div className="absolute top-40 right-20 text-purple-300/20 animate-bounce" style={{ animationDelay: '2s' }}>
+        <div className="absolute top-40 right-20 text-black/20 animate-bounce" style={{ animationDelay: '2s' }}>
           <Zap className="h-6 w-6" />
         </div>
-        <div className="absolute bottom-40 left-20 text-cyan-300/20 animate-bounce" style={{ animationDelay: '3s' }}>
+        <div className="absolute bottom-40 left-20 text-black/20 animate-bounce" style={{ animationDelay: '3s' }}>
           <Star className="h-7 w-7" />
         </div>
-        <div className="absolute bottom-20 right-10 text-pink-300/20 animate-bounce" style={{ animationDelay: '0.5s' }}>
+        <div className="absolute bottom-20 right-10 text-black/20 animate-bounce" style={{ animationDelay: '0.5s' }}>
           <Sparkles className="h-5 w-5" />
         </div>
       </div>
@@ -137,24 +137,24 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="bg-white/95 backdrop-blur-sm border-b border-indigo-100/40 px-4 md:px-6 py-4 shadow-lg">
+        <div className="bg-black/30 backdrop-blur-sm border-b border-purple-500/40 px-4 md:px-6 py-4 shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <h1 className="text-lg font-semibold text-indigo-600 flex items-center space-x-2">
+              <h1 className="text-lg font-semibold text-white flex items-center space-x-2">
                 <span>Parafyze Chat</span>
                 <span className="text-xl animate-pulse">🤖</span>
                 <span className="text-sm animate-bounce">✨</span>
               </h1>
               {/* Mobile Credits Display */}
-              <div className="md:hidden flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-purple-100 px-3 py-1.5 rounded-lg shadow-md">
-                <Coins className="h-3 w-3 text-yellow-500 animate-pulse" />
-                <span className="text-xs font-semibold text-indigo-700">100</span>
+              <div className="md:hidden flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-3 py-1.5 rounded-lg shadow-md">
+                <Coins className="h-3 w-3 text-yellow-400 animate-pulse" />
+                <span className="text-xs font-semibold text-white">100</span>
                 <span className="text-sm animate-pulse">💎</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <button
-                className="p-2 text-indigo-600 hover:text-indigo-700 transition-all duration-300 group hover:bg-indigo-50 rounded-lg"
+                className="p-2 text-purple-400 hover:text-purple-300 transition-all duration-300 group hover:bg-purple-500/20 rounded-lg"
                 title="Regenerate response"
               >
                 <RotateCcw className="h-5 w-5 group-hover:rotate-180 transition-transform duration-700" />
@@ -164,34 +164,34 @@ export default function ChatPage() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto pb-96 bg-white/95 backdrop-blur-sm">
+        <div className="flex-1 overflow-y-auto pb-96 bg-black/20 backdrop-blur-sm">
           {/* Dynamic Messages */}
           {messages.map((message) => (
-              <div key={message.id} className={`py-4 md:py-6 ${message.role === 'user' ? 'bg-indigo-50/50' : 'bg-white/50'} animate-slideInUp`}>
+              <div key={message.id} className={`py-4 md:py-6 ${message.role === 'user' ? 'bg-black/40' : 'bg-black/20'} animate-slideInUp`}>
                 <div className="max-w-3xl mx-auto px-3 md:px-4">
                   <div className="flex items-start space-x-3 md:space-x-4">
-                    <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg transition-all duration-300 hover:scale-110 ${
-                      message.role === 'user' 
-                        ? 'bg-gradient-to-br from-indigo-500 to-indigo-600 text-white' 
-                        : 'bg-gradient-to-br from-indigo-400 to-indigo-500 text-white'
-                    }`}>
+
+                    <div className="w-9 text-white border border-purple-400 bg-purple-600 h-9 md:w-8 md:h-8 rounded-full flex items-center justify-center   ">
                       {message.role === 'user' ? (
-                        <User className="h-3 w-3 md:h-4 md:w-4" />
+                        <User className="h-4 w-4 md:h-4 md:w-4" />
                       ) : (
-                        <Bot className="h-3 w-3 md:h-4 md:w-4" />
+                        <Bot className="h-3 w-3 bg-purple-600 text-white md:h-4 md:w-4" />
                       )}
                     </div>
+
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm md:text-sm text-gray-900 leading-relaxed whitespace-pre-wrap animate-fadeIn">
+                      <div className="text-sm border border-purple-400/30 md:text-sm shadow-lg p-4 rounded-lg text-gray-200 leading-relaxed whitespace-pre-wrap animate-fadeIn bg-black/30">
                         {message.content}
                       </div>
                       {message.role === 'assistant' && (
                         <div className="mt-3 flex items-center space-x-2 animate-fadeInUp">
-                          <button className="flex items-center space-x-1 px-3 py-1.5 text-xs bg-gradient-to-r from-indigo-100 to-purple-100 hover:from-indigo-200 hover:to-purple-200 text-indigo-700 rounded-lg transition-all duration-300 group shadow-md hover:shadow-lg transform hover:scale-105">
+                          <button className="flex items-center space-x-1 px-3 py-1.5 text-xs bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 text-white rounded-lg transition-all duration-300 group shadow-md hover:shadow-lg transform hover:scale-105">
                             <RefreshCw className="h-3 w-3 group-hover:rotate-180 transition-transform duration-500" />
                             <span>Paraphrase it</span>
                             <span className="text-sm group-hover:animate-bounce">✨</span>
                           </button>
+
+                          <button className='text-purple-300 hover:text-purple-200'>Humanize it</button>
                         </div>
                       )}
                     </div>
@@ -200,8 +200,8 @@ export default function ChatPage() {
               </div>
             ))}
             <div ref= {AiThinking} className='hidden w-full mt-6 justify-center items-center space-x-2'>
-            <div   className = 'border-b-2 border-b-black rounded-full w-4 h-4 animate-spin'></div>
-            <span className='text-black text-sm animate-pulse  '>🤖 AI is thinking... 
+            <div   className = 'border-b-2 border-b-purple-400 rounded-full w-4 h-4 animate-spin'></div>
+            <span className='text-purple-300 text-sm animate-pulse  '>🤖 AI is thinking... 
              
             </span>
 
@@ -214,8 +214,9 @@ export default function ChatPage() {
         </div>
 
         {/* Input Area */}
-        <div className="bg-white/95 fixed bottom-0 w-full left-0 right-1/2 backdrop-blur-sm border-t border-indigo-100/40 p-3 md:p-4 shadow-lg">
+        <div className="bg-black/30 fixed bottom-0 w-full left-0 right-1/2 backdrop-blur-sm border-t border-purple-500/40 p-3 md:p-4 shadow-lg">
           <div className="max-w-3xl mx-auto">
+          
             <form className="relative" onSubmit={handleSubmit}>
               <div className="relative group">
                 <textarea
@@ -223,7 +224,7 @@ export default function ChatPage() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Message Parafyze... 💬"
-                  className="w-full pl-3 md:pl-4 pr-10 md:pr-12 py-2 md:py-3 border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-900 placeholder-gray-500 resize-none bg-white/80 text-sm md:text-base transition-all duration-300 hover:shadow-md focus:shadow-lg group-hover:border-indigo-300"
+                  className="w-full pl-3 md:pl-4 pr-10 md:pr-12 py-2 md:py-3 border border-purple-400/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 resize-none bg-black/50 text-sm md:text-base transition-all duration-300 hover:shadow-md focus:shadow-lg group-hover:border-purple-400/70"
                   rows="1"
                   style={{ minHeight: '40px', maxHeight: '120px' }}
                   disabled={isLoading}
@@ -231,14 +232,14 @@ export default function ChatPage() {
                 <button
                   type="submit"
                   disabled={isLoading || !inputValue.trim()}
-                  className="absolute right-1 md:right-2 top-1/2 transform -translate-y-1/2 p-1.5 md:p-2 text-indigo-600 hover:text-indigo-700 transition-all duration-300 group hover:bg-indigo-50 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute right-1 md:right-2 top-1/2 transform -translate-y-1/2 p-1.5 md:p-2 text-purple-400 hover:text-purple-300 transition-all duration-300 group hover:bg-purple-500/20 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4 md:h-5 md:w-5 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
                 </button>
               </div>
             </form>
             
-            <div className="text-xs text-indigo-600 mt-2 text-center flex items-center justify-center space-x-2">
+            <div className="text-xs text-purple-300 mt-2 text-center flex items-center justify-center space-x-2">
               <span>100 credits remaining</span>
               <span className="text-lg animate-pulse">💎</span>
             </div>

@@ -117,17 +117,17 @@ export default function PasswordChange() {
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-gradient-colorful flex items-center justify-center">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-beautiful border border-indigo-100/40 p-8 max-w-md w-full mx-4">
+        <div className="bg-black/30 backdrop-blur-sm rounded-2xl shadow-beautiful border border-purple-500/40 p-8 max-w-md w-full mx-4">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <Brain className="h-10 w-10 text-indigo-600" />
-              <h1 className="text-xl font-bold text-indigo-600">Parafyze</h1>
+              <Brain className="h-10 w-10 text-purple-400" />
+              <h1 className="text-xl font-bold text-purple-400">Parafyze</h1>
             </div>
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lock className="h-8 w-8 text-green-600" />
+            <div className="w-16 h-16 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="h-8 w-8 text-green-400" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">Password Changed Successfully!</h2>
-            <p className="text-gray-600">
+            <h2 className="text-lg font-semibold text-white mb-2">Password Changed Successfully!</h2>
+            <p className="text-gray-300">
               Your password has been updated. You can now use your new password to sign in.
             </p>
           </div>
@@ -135,7 +135,7 @@ export default function PasswordChange() {
           <div className="space-y-4">
             <Link
               href="/"
-              className="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-xl hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+              className="w-full bg-gradient-primary text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-600 hover:via-pink-600 hover:to-pink-700 transition-colors duration-300 flex items-center justify-center space-x-2"
             >
               <span>Go to Dashboard</span>
             </Link>
@@ -148,7 +148,7 @@ export default function PasswordChange() {
                 setPasswordStrength(0);
                 setPasswordFeedback('');
               }}
-              className="w-full bg-gray-100 text-gray-700 font-semibold py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors duration-300"
+              className="w-full bg-black/50 border border-purple-400/50 text-white font-semibold py-3 px-6 rounded-xl hover:bg-black/70 transition-colors duration-300"
             >
               Change Another Password
             </button>
@@ -160,31 +160,31 @@ export default function PasswordChange() {
 
   return (
     <div className="min-h-screen bg-gradient-colorful flex items-center justify-center">
-      <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-beautiful border border-indigo-100/40 p-8 max-w-md w-full mx-4">
+      <div className="bg-black/30 backdrop-blur-sm rounded-2xl shadow-beautiful border border-purple-500/40 p-8 max-w-md w-full mx-4">
         <div className="text-center mb-6">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <Brain className="h-10 w-10 text-indigo-600" />
-            <h1 className="text-xl font-bold text-indigo-600">Parafyze</h1>
+            <Brain className="h-10 w-10 text-purple-400" />
+            <h1 className="text-xl font-bold text-purple-400">Parafyze</h1>
           </div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">Change Password</h2>
-          <p className="text-gray-600">Choose a new password for your account.</p>
+          <h2 className="text-lg font-semibold text-white mb-2">Change Password</h2>
+          <p className="text-gray-300">Choose a new password for your account.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-900/30 border border-red-400/50 text-red-300 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
           {/* New Password */}
           <div>
-            <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-200 mb-2">
               New Password
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-indigo-500" />
+                <Lock className="h-5 w-5 text-purple-400" />
               </div>
               <input
                 id="newPassword"
@@ -192,14 +192,14 @@ export default function PasswordChange() {
                 value={newPassword}
                 onChange={handleNewPasswordChange}
                 placeholder="Enter your new password"
-                className="w-full pl-12 pr-12 py-3 border border-indigo-200 text-black rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-base shadow-soft transition-all duration-300 hover:shadow-md bg-white/80"
+                className="w-full pl-12 pr-12 py-3 border border-purple-400/50 text-white rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base shadow-soft transition-all duration-300 hover:shadow-md bg-black/50 placeholder-gray-400"
                 required
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-indigo-500 hover:text-indigo-600 transition-colors duration-300"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-300"
                 disabled={isLoading}
               >
                 {showNewPassword ? (
@@ -215,12 +215,12 @@ export default function PasswordChange() {
 
           {/* Confirm New Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-200 mb-2">
               Confirm New Password
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-indigo-500" />
+                <Lock className="h-5 w-5 text-purple-400" />
               </div>
               <input
                 id="confirmPassword"
@@ -228,10 +228,10 @@ export default function PasswordChange() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your new password"
-                className={`w-full pl-12 pr-12 py-3 border rounded-xl text-black focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-base shadow-soft transition-all duration-300 hover:shadow-md bg-white/80 ${
+                className={`w-full pl-12 pr-12 py-3 border rounded-xl text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base shadow-soft transition-all duration-300 hover:shadow-md bg-black/50 placeholder-gray-400 ${
                   confirmPassword && !passwordsMatch
-                    ? 'border-red-300 focus:ring-red-500'
-                    : 'border-indigo-200'
+                    ? 'border-red-400 focus:ring-red-500'
+                    : 'border-purple-400/50'
                 }`}
                 required
                 disabled={isLoading}
@@ -239,7 +239,7 @@ export default function PasswordChange() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-indigo-500 hover:text-indigo-600 transition-colors duration-300"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-300"
                 disabled={isLoading}
               >
                 {showConfirmPassword ? (
@@ -250,17 +250,17 @@ export default function PasswordChange() {
               </button>
             </div>
             {confirmPassword && !passwordsMatch && (
-              <p className="text-red-600 text-sm mt-1">Passwords don't match</p>
+              <p className="text-red-400 text-sm mt-1">Passwords don't match</p>
             )}
             {confirmPassword && passwordsMatch && (
-              <p className="text-green-600 text-sm mt-1">✓ Passwords match</p>
+              <p className="text-green-400 text-sm mt-1">✓ Passwords match</p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={isLoading || !isFormValid}
-            className="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-xl hover:bg-indigo-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
+            className="w-full bg-gradient-primary text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-600 hover:via-pink-600 hover:to-pink-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
           >
             {isLoading ? (
               <>
