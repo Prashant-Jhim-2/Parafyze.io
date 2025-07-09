@@ -13,6 +13,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -28,29 +29,81 @@ export default function Home() {
     };
   }, [showUserMenu]);
 
-  // UseEffect to check if user is logged in
+  // UseEffect to check if user is logged in and listen for auth changes
   useEffect(()=>{
-    (async()=>{
+    // Get initial session
+    const getInitialSession = async () => {
       const {data,error} = await supabase.auth.getSession()
-       const user = data.session?.user 
-       if (user){
-        console.log(user)
+      const user = data.session?.user 
+      if (user){
+        console.log('👤 User session found:', user)
         SetFullName(user.user_metadata?.full_name || user.email?.split('@')[0] || 'User')
         setUserEmail(user.email || '')
-       }
-    })()
+      } else {
+        console.log('👤 No user session found')
+        SetFullName(undefined)
+        setUserEmail('')
+      }
+    }
+
+    getInitialSession()
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('🔄 Auth state changed:', event, session?.user?.email)
+        
+        if (event === 'SIGNED_IN' && session?.user) {
+          SetFullName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User')
+          setUserEmail(session.user.email || '')
+        } else if (event === 'SIGNED_OUT') {
+          SetFullName(undefined)
+          setUserEmail('')
+          setShowUserMenu(false)
+        }
+      }
+    )
+
+    // Cleanup subscription
+    return () => subscription.unsubscribe()
   },[])
 
-  // Function to Logout 
-  const Logout = async()=>{
-    const {error} = await supabase.auth.signOut()
-    if (error){
-      console.log(error)
-    }
-    else{
-      SetFullName(undefined)
-      setUserEmail('')
-      setShowUserMenu(false)
+    // Function to Logout 
+  const Logout = async(e)=>{
+    console.log('Logout button clicked')
+    console.log('Event:', e)
+    console.log('Event target:', e.target)
+    
+    // Prevent event bubbling to avoid closing the menu
+    e.preventDefault()
+    e.stopPropagation()
+    
+    try {
+      setIsLoggingOut(true)
+      console.log('🔄 Starting logout process...')
+      console.log('isLoggingOut set to:', true)
+      
+      const {error} = await supabase.auth.signOut()
+      console.log('Supabase signOut result:', {error})
+      
+      if (error){
+        console.error('❌ Logout error:', error)
+        alert('Logout failed: ' + error.message)
+        setIsLoggingOut(false)
+      }
+      else{
+        console.log('✅ Logout successful')
+        SetFullName(undefined)
+        setUserEmail('')
+        setShowUserMenu(false)
+        
+        // Force a page refresh to ensure clean state
+        window.location.reload()
+      }
+    } catch (err) {
+      console.error('❌ Logout exception:', err)
+      alert('Logout failed: ' + err.message)
+      setIsLoggingOut(false)
     }
   }
 
@@ -136,30 +189,49 @@ export default function Home() {
                 </button>
               </Link>
             </div>
-          ) : (
+                    ) : (
             <div className="relative user-menu-container">
-              {/* User Menu Toggle */}
-              <button 
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center space-x-2 sm:space-x-3 bg-black/30 backdrop-blur-sm border border-purple-400/50 hover:border-purple-400 text-white font-medium px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl hover:bg-purple-500/20 transition-all duration-300 elegant-hover text-sm sm:text-base shadow-soft"
-              >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-primary rounded-full flex items-center justify-center">
-                  <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                </div>
-                <span className="hidden sm:inline">{FullName}</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
-              </button>
+              {/* Simple User Button */}
+              <div className="flex items-center justify-center space-x-3">
+                <button 
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 bg-black/30 border border-purple-400/50 text-white px-4 py-2 rounded-lg hover:bg-purple-500/20 transition-all duration-300"
+                >
+                  <User className="h-5 w-5" />
+                  <span>{FullName}</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {/* Direct Logout Button */}
+                <button 
+                  onClick={Logout}
+                  disabled={isLoggingOut}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {isLoggingOut ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Logging out...</span>
+                    </>
+                  ) : (
+                    <>
+                      <LogOut className="h-4 w-4" />
+                      <span>Logout</span>
+                    </>
+                  )}
+                </button>
+              </div>
 
-              {/* User Dropdown Menu */}
+              {/* Simple Dropdown Menu */}
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-64 bg-black/90 backdrop-blur-sm border border-purple-500/50 rounded-xl shadow-beautiful z-50 animate-fadeIn">
+                <div className="absolute z-60 right-0 mt-2 w-56 bg-black/90 border border-purple-500/50 rounded-lg shadow-lg ">
                   <div className="p-4 border-b border-purple-500/30">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
-                        <User className="h-5 w-5 text-white" />
+                      <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                        <User className="h-4 w-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-white font-semibold text-sm">{FullName}</p>
+                        <p className="text-white font-medium text-sm">{FullName}</p>
                         <p className="text-gray-400 text-xs">{userEmail}</p>
                       </div>
                     </div>
@@ -167,26 +239,16 @@ export default function Home() {
                   
                   <div className="p-2">
                     <Link href="/chat">
-                      <button className="w-full flex items-center space-x-3 px-3 py-2 text-gray-300 hover:text-white hover:bg-purple-500/20 rounded-lg transition-all duration-300 text-sm">
+                      <button className="w-full text-left px-3 py-2 text-gray-300 hover:text-white hover:bg-purple-500/20 rounded transition-all duration-300 text-sm flex items-center space-x-2">
                         <MessageSquare className="h-4 w-4" />
                         <span>Chat with AI</span>
                       </button>
                     </Link>
                     
-                    <button className="w-full flex items-center space-x-3 px-3 py-2 text-gray-300 hover:text-white hover:bg-purple-500/20 rounded-lg transition-all duration-300 text-sm">
+                    <button className="w-full text-left px-3 py-2 text-gray-300 hover:text-white hover:bg-purple-500/20 rounded transition-all duration-300 text-sm flex items-center space-x-2">
                       <Settings className="h-4 w-4" />
                       <span>Settings</span>
                     </button>
-                    
-                    <div className="border-t border-purple-500/30 mt-2 pt-2">
-                      <button 
-                        onClick={Logout}
-                        className="w-full flex items-center space-x-3 px-3 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-300 text-sm"
-                      >
-                        <LogOut className="h-4 w-4" />
-                        <span>Logout</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
               )}
@@ -194,15 +256,15 @@ export default function Home() {
           )}
         </div>
         
-        <p className="text-center text-gray-300 mt-4 sm:mt-6 text-lg sm:text-xl lg:text-2xl font-medium text-shadow-soft max-w-4xl mx-auto">
+        <p className="text-center text-gray-300 mt-40  text-lg sm:text-xl lg:text-2xl font-medium text-shadow-soft max-w-4xl mx-auto">
           {FullName ? `Welcome back, ${FullName}! ` : ''}Transform AI responses into natural, human-style answers
         </p>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl relative z-10">
+      <main className="container mx-auto  px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl relative z-10">
         {/* Hero Section */}
-        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+        <div className="text-center z-10 mb-12 sm:mb-16 lg:mb-20">
           <div className="inline-flex items-center space-x-2 sm:space-x-3 bg-black/20 backdrop-blur-sm rounded-full px-6 py-3 sm:px-8 sm:py-4 mb-6 sm:mb-8 lg:mb-10 shadow-soft border border-purple-500/30">
             <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-purple-400" />
             <span className="text-xs sm:text-sm font-semibold text-purple-300">AI-Powered Human-Style Responses</span>
