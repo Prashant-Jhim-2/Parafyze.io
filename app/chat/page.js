@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, Trash2, RotateCcw, Plus, Coins, RefreshCw, Sparkles, Zap, Star } from 'lucide-react';
+import { Send, User, Bot, CheckCheck,ChevronDown, RotateCcw, Plus, Coins, RefreshCw, Sparkles, Zap, Star, Circle } from 'lucide-react';
 
 export default function ChatPage() {
   const [floatingElements, setFloatingElements] = useState([]);
@@ -45,7 +45,8 @@ export default function ChatPage() {
       return {
         id:message.id,
         role:message.role,
-        content:message.content
+        content:message.content,
+        rephrasedcontent:message.rephrasedcontent || undefined
       }
     })
     history.push(userMessage)
@@ -78,7 +79,8 @@ export default function ChatPage() {
         const assistantMessage = {
           id: Date.now() + 1,
           role: "assistant",
-          content: data.response
+          content: data.response,
+          rephrasedcontent:  undefined
         };
         setMessages(prev => [...prev, assistantMessage]);
         AiThinking.current.style.display = 'none';
@@ -94,6 +96,73 @@ export default function ChatPage() {
       setIsLoading(false);
     }
   };
+
+  // Message Card 
+  const MessageCard = (props)=>{
+    const message = props.data;
+    const [openToneDropdowns, setOpenToneDropdowns] = useState(false);
+    const [selectedtone,changeTone] = useState(undefined);
+    return (
+      <div key={message.id} className={`py-4 md:py-6 ${message.role === 'user' ? 'bg-black/40' : 'bg-black/20'} animate-slideInUp`}>
+              <div className="max-w-3xl mx-auto px-3 md:px-4">
+                <div className="flex items-start space-x-3 md:space-x-4">
+
+                  <div className="w-9 text-white border border-purple-400 bg-purple-600 h-9 md:w-8 md:h-8 rounded-full flex items-center justify-center   ">
+                    {message.role === 'user' ? (
+                      <User className="h-4 w-4 md:h-4 md:w-4" />
+                    ) : (
+                      <Bot className="h-3 w-3 bg-purple-600 text-white md:h-4 md:w-4" />
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm border border-purple-400/30 md:text-sm shadow-lg p-4 rounded-lg text-gray-200 leading-relaxed whitespace-pre-wrap animate-fadeIn bg-black/30">
+                      {message.content}
+                    </div>
+                    {message.role === 'assistant' && (
+                      <>
+                      <div className="mt-3 mb-6 flex items-center space-x-2 animate-fadeInUp">
+                        <button className="flex items-center space-x-1 px-3 py-1.5 text-xs bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 text-white rounded-lg transition-all duration-300 group shadow-md hover:shadow-lg transform hover:scale-105">
+                          <RefreshCw className="h-3 w-3 group-hover:rotate-180 transition-transform duration-500" />
+                          <span>Paraphrase it</span>
+                          <span className="text-sm group-hover:animate-bounce">✨</span>
+                        </button>
+                        <button onClick={()=>setOpenToneDropdowns(!openToneDropdowns)} className = 'flex items-center gap-2 space-x-1 px-3 py-1.5 text-xs bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 text-white rounded-lg transition-all duration-300 group shadow-md hover:shadow-lg transform hover:scale-105'>{selectedtone || 'Select Tone'} <ChevronDown className={`h-3 w-3 transition-transform duration-300 ${openToneDropdowns ? 'rotate-180' : ''}`} /></button>
+
+                        
+                      </div>
+                      {openToneDropdowns && (
+                        <div className = 'flex w-full mt-6  bg-gradient-to-r from-purple-500/20 to-pink-500/20  border-black border-2 backdrop-blur-sm text-sm  gap-4 w-36  items-center p-4 overflow-none border rounded-lg flex-col '>
+                          
+                        <button onClick={()=>{changeTone('Formal');setOpenToneDropdowns(false)}} className = {`w-full  p-2 hover:bg-purple-700 text-white ${selectedtone === 'Formal' ? 'bg-purple-700' : ''} `}>Formal</button>
+                        <button onClick={()=>{changeTone('Informal');setOpenToneDropdowns(false)}} className = {`w-full  p-2 hover:bg-purple-700 text-white ${selectedtone === 'Informal' ? 'bg-purple-700' : ''} `}>Informal</button>
+                        <button onClick={()=>{changeTone('Technical');setOpenToneDropdowns(false)}} className = {`w-full p-2 hover:bg-purple-700 text-white ${selectedtone === 'Technical' ? 'bg-purple-700' : ''} `}>Technical</button>
+                          <button onClick={()=>{changeTone('Creative');setOpenToneDropdowns(false)}} className = {`w-full p-2 hover:bg-purple-700 text-white ${selectedtone === 'Creative' ? 'bg-purple-700' : ''} `}>Creative</button>
+                        <button onClick={()=>{changeTone('Academic');setOpenToneDropdowns(false)}} className = {`w-full  p-2 hover:bg-purple-700 text-white ${selectedtone === 'Academic' ? 'bg-purple-700' : ''} `}>Academic</button>
+                        <button onClick={()=>{changeTone('Business');setOpenToneDropdowns(false)}} className = 'w-full  p-2 hover:bg-purple-700 text-white'>Business</button>
+                        <button onClick={()=>{changeTone('Legal');setOpenToneDropdowns(false)}} className = 'w-full p-2 hover:bg-purple-700 text-white'>Legal</button>
+                        </div>
+                      )}
+                      </>
+                    )}
+
+                    
+                   {(!message.rephrasedcontent  && message.role === 'assistant') && (
+                    <>
+                    <label className = 'text-sm font-bold text-white flex items-center gap-2'>Paraphrased Message : <button  className = 'text-xs bg-gradient-to-r from-purple-500/20 flex items-center justify-center gap-2 to-pink-500/20 p-2 rounded-lg  text-white'><RefreshCw className = 'h-4 w-4 ' /> Reparaphrase it </button></label>
+                    <div className = 'text-sm leading-relaxed whitespace-pre-wrap text-white mt-6 mb-6'>
+                      {message.content}
+                    </div>
+                    <label className = 'text-xs bg-gradient-to-r w-40 flex items-center gap-2 from-purple-500/20 to-pink-500/20 p-2 rounded-lg  text-white'> <CheckCheck className = 'h-4 w-4' /> Plagiarism Checked   </label>
+                    </>
+                   )}
+                  </div>
+                </div>
+              </div>
+            </div>
+    )
+  }
+
 
   
   return (
@@ -166,39 +235,7 @@ export default function ChatPage() {
         {/* Messages */}
         <div className="flex-1 overflow-y-auto pb-96 bg-black/20 backdrop-blur-sm">
           {/* Dynamic Messages */}
-          {messages.map((message) => (
-              <div key={message.id} className={`py-4 md:py-6 ${message.role === 'user' ? 'bg-black/40' : 'bg-black/20'} animate-slideInUp`}>
-                <div className="max-w-3xl mx-auto px-3 md:px-4">
-                  <div className="flex items-start space-x-3 md:space-x-4">
-
-                    <div className="w-9 text-white border border-purple-400 bg-purple-600 h-9 md:w-8 md:h-8 rounded-full flex items-center justify-center   ">
-                      {message.role === 'user' ? (
-                        <User className="h-4 w-4 md:h-4 md:w-4" />
-                      ) : (
-                        <Bot className="h-3 w-3 bg-purple-600 text-white md:h-4 md:w-4" />
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm border border-purple-400/30 md:text-sm shadow-lg p-4 rounded-lg text-gray-200 leading-relaxed whitespace-pre-wrap animate-fadeIn bg-black/30">
-                        {message.content}
-                      </div>
-                      {message.role === 'assistant' && (
-                        <div className="mt-3 flex items-center space-x-2 animate-fadeInUp">
-                          <button className="flex items-center space-x-1 px-3 py-1.5 text-xs bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 text-white rounded-lg transition-all duration-300 group shadow-md hover:shadow-lg transform hover:scale-105">
-                            <RefreshCw className="h-3 w-3 group-hover:rotate-180 transition-transform duration-500" />
-                            <span>Paraphrase it</span>
-                            <span className="text-sm group-hover:animate-bounce">✨</span>
-                          </button>
-
-                          <button className='text-purple-300 hover:text-purple-200'>Humanize it</button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          {messages.map((message) => <MessageCard key = {message.id} data = {message} />)}
             <div ref= {AiThinking} className='hidden w-full mt-6 justify-center items-center space-x-2'>
             <div   className = 'border-b-2 border-b-purple-400 rounded-full w-4 h-4 animate-spin'></div>
             <span className='text-purple-300 text-sm animate-pulse  '>🤖 AI is thinking... 
