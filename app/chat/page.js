@@ -261,7 +261,7 @@ export default function ChatPage() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Message Parafyze... 💬"
-                  className="w-full pl-3 md:pl-4 pr-10 md:pr-12 py-2 md:py-3 border border-purple-400/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 resize-none bg-black/50 text-sm md:text-base transition-all duration-300 hover:shadow-md focus:shadow-lg group-hover:border-purple-400/70"
+                  className="w-full pl-3 md:pl-4 pr-10 md:pr-12 py-2 md:py-3 border border-purple-400/50 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 resize-none bg-black/50 text-base md:text-base transition-all duration-300 hover:shadow-md focus:shadow-lg group-hover:border-purple-400/70"
                   rows="1"
                   style={{ minHeight: '40px', maxHeight: '120px' }}
                   disabled={isLoading}
